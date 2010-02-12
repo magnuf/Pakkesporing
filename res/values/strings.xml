@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pakketracker</string>
+    <string name="add_package">Legg til ny pakke</string>
+    <string name="refresh">Oppdater</string>
+    <string name="settings">Innstillinger</string>
+</resources>
