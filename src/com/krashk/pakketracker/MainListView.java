@@ -1,6 +1,7 @@
 package com.krashk.pakketracker;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,13 +11,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class Mainlist extends ListActivity {
+public class MainListView extends ListActivity {
 	
 	public static final int REFRESH_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST +1;
     private PackagesDbAdapter packageDbAdapter;
 	
-    /** Called when the activity is first created. */
+    /**	 Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +33,12 @@ public class Mainlist extends ListActivity {
 			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				
+				Intent i = new Intent(MainListView.this, NewPackageView.class);
+				startActivity(i);
 			}
 		};
+		
+		createNew.setOnClickListener(add);
 
     }
 
