@@ -1,6 +1,11 @@
 package com.krashk.pakketracker;
 
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,17 +30,30 @@ public class NewPackageView extends Activity {
 			public void onClick(View arg0) {
 
 				TextView textbox = (TextView) findViewById(R.id.entry);
-				if (textbox.getText().length() == 0){
-					Toast.makeText(((View) arg0.getParent()).getContext(), R.string.empty, Toast.LENGTH_SHORT);
+				String packagenumber = textbox.getText().toString();
+				if (packagenumber.length() == 0){
+					Toast.makeText(((View) arg0.getParent()).getContext(), R.string.empty, Toast.LENGTH_SHORT).show();
 				}
-				else if (textbox.getText().length() > 0){
+				else if (packagenumber.length() > 0){
 
 					PackagesDbAdapter packageDbAdapter = new PackagesDbAdapter(((View) arg0.getParent()).getContext());
 
 					packageDbAdapter.open();
-					packageDbAdapter.createPackage(textbox.getText().toString());
+					Long packageid = packageDbAdapter.createPackage(packagenumber);
+					try {
+						String newStatus = TrackingUtils.updateStatus(packagenumber, new String());
+						if (newStatus != null){
+							packageDbAdapter.updatePackage(packageid, packagenumber, newStatus);
+						}
+					} catch (ClientProtocolException e) {
+						Toast.makeText(((View) arg0.getParent()).getContext(), "Feil i HTTP-protokollen", Toast.LENGTH_SHORT).show();
+					} catch (IOException e) {
+						Toast.makeText(((View) arg0.getParent()).getContext(), "Feil ved tilkobling til nettverk/internett", Toast.LENGTH_SHORT).show();
+					}
 					packageDbAdapter.close();
-					
+					Intent i = new Intent(NewPackageView.this, MainListView.class);
+					startActivity(i);
+
 				}
 			}
 		});
