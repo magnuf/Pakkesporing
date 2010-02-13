@@ -43,7 +43,7 @@ public class NewPackageView extends Activity {
 					try {
 						String newStatus = TrackingUtils.updateStatus(packagenumber, new String());
 						if (newStatus != null){
-							packageDbAdapter.updatePackage(packageid, packagenumber, newStatus);
+							packageDbAdapter.updatePackage(packageid, newStatus, TrackingUtils.CHANGED_CHANGE);
 						}
 					} catch (ClientProtocolException e) {
 						Toast.makeText(((View) arg0.getParent()).getContext(), "Feil i HTTP-protokollen", Toast.LENGTH_SHORT).show();
@@ -54,8 +54,6 @@ public class NewPackageView extends Activity {
 					Intent i = new Intent(NewPackageView.this, MainListView.class);
 					startActivity(i);
 
-					Intent i = new Intent(NewPackageView.this, MainListView.class);
-					startActivity(i);
 
 				}
 			}
