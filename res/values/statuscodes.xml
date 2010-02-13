@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <item format="integer" name="changed" type="attr">1</item>
+<item format="integer" name="arrived" type="attr">2</item>
+<item format="integer" name="error" type="attr">3</item>
+<item format="integer" name="uninitialized" type="attr">4</item>
+<item format="integer" name="unchanged" type="attr">5</item>
 </resources>

@@ -10,10 +10,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 public class TrackingUtils {
-	
-	public static final int CHANGED_ERROR = 0;
-	public static final int CHANGED_CHANGE = 1;
-	public static final int CHANGED_ARRIVED = 2;
 
 
 	public static String updateStatus(String packageNumber, String oldStatus) throws ClientProtocolException, IOException {	
