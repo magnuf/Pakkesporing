@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 public class NewPackageView extends Activity {
 
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,38 +38,46 @@ public class NewPackageView extends Activity {
 					Toast.makeText(((View) arg0.getParent()).getContext(), R.string.empty, Toast.LENGTH_SHORT);
 				}
 				else if (textbox.getText().length() > 0){
-						HttpClient client = new DefaultHttpClient();
-						HttpGet get = new HttpGet("http://sporing.posten.no/sporing.html?q="+textbox.getText());
-						ResponseHandler<String> responseHandler = new BasicResponseHandler();
-						String responseBody = null;
 
-						try {
-							responseBody = client.execute(get, responseHandler);
-						} catch (ClientProtocolException e) {
-							// CARE
-						} catch (IOException e) {
-							// CARE
-						}
-						responseBody = responseBody.replace("\n", "");
-						// first find the event field
-						int startIndex = responseBody.indexOf("<div class=\"sporing-sendingandkolli-latestevent-text\">");
-						int endIndex = responseBody.indexOf("</div>", startIndex);
+					PackagesDbAdapter packageDbAdapter = new PackagesDbAdapter(((View) arg0.getParent()).getContext());
 
-						// remove all tags, whitespace - and trim
-						String newStatus = responseBody.substring(startIndex, endIndex)
-						.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();
+					packageDbAdapter.open();
+					packageDbAdapter.createPackage(textbox.getText().toString());
+					packageDbAdapter.close();
+					
+					//FIEX 
+					HttpClient client = new DefaultHttpClient();
+					HttpGet get = new HttpGet("http://sporing.posten.no/sporing.html?q="+textbox.getText());
+					ResponseHandler<String> responseHandler = new BasicResponseHandler();
+					String responseBody = null;
 
-						// now find the date field
-						startIndex = responseBody.indexOf("<div class=\"sporing-sendingandkolli-latestevent-date\">", startIndex);
-						endIndex = responseBody.indexOf("</div>", startIndex);
-
-						// remove all tags, whitespace - and trim
-						newStatus += " " + responseBody.substring(startIndex, endIndex)
-						.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();
-
-						((TextView)findViewById(R.id.output)).setText(newStatus);
+					try {
+						responseBody = client.execute(get, responseHandler);
+					} catch (ClientProtocolException e) {
+						// CARE
+					} catch (IOException e) {
+						// CARE
 					}
+					responseBody = responseBody.replace("\n", "");
+					// first find the event field
+					int startIndex = responseBody.indexOf("<div class=\"sporing-sendingandkolli-latestevent-text\">");
+					int endIndex = responseBody.indexOf("</div>", startIndex);
+
+					// remove all tags, whitespace - and trim
+					String newStatus = responseBody.substring(startIndex, endIndex)
+					.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();
+
+					// now find the date field
+					startIndex = responseBody.indexOf("<div class=\"sporing-sendingandkolli-latestevent-date\">", startIndex);
+					endIndex = responseBody.indexOf("</div>", startIndex);
+
+					// remove all tags, whitespace - and trim
+					newStatus += " " + responseBody.substring(startIndex, endIndex)
+					.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();
+
+					((TextView)findViewById(R.id.output)).setText(newStatus);
 				}
-			});
-		}
+			}
+		});
 	}
+}

@@ -115,7 +115,7 @@ public class PackagesDbAdapter {
 	public Cursor fetchAllPackages() {
 
 		return db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_NUMBER,
-				KEY_STATUS}, null, null, null, null, null);
+				KEY_STATUS}, null, null, null, null, KEY_ID+ "ASC");
 	}
 
 	/**

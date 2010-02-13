@@ -25,7 +25,7 @@ public class MainListView extends ListActivity {
         packageDbAdapter = new PackagesDbAdapter(this);
         packageDbAdapter.open();
         
-//        fillData();
+        fillData();
         
         Button createNew = (Button) findViewById(R.id.newpackagebutton);
         
