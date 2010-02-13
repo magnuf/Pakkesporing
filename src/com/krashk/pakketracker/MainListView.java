@@ -22,6 +22,7 @@ public class MainListView extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listpackages);
+        
         packageDbAdapter = new PackagesDbAdapter(this);
         packageDbAdapter.open();
         
@@ -29,16 +30,14 @@ public class MainListView extends ListActivity {
         
         Button createNew = (Button) findViewById(R.id.newpackagebutton);
         
-        OnClickListener add = new OnClickListener() {
+        createNew.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				Intent i = new Intent(MainListView.this, NewPackageView.class);
 				startActivity(i);
 			}
-		};
-		
-		createNew.setOnClickListener(add);
+		});
 
     }
 
