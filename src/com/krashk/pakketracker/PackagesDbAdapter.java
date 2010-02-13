@@ -12,7 +12,7 @@ public class PackagesDbAdapter {
 
 	public static final String KEY_NUMBER = "trackingnumber";
 	public static final String KEY_STATUS = "status";
-	public static final String KEY_ID = "id";
+	public static final String KEY_ID = "_id";
 
 	private static final String TAG = "PackagesDbAdapter";
 	private DatabaseHelper dbHelper;
@@ -22,7 +22,7 @@ public class PackagesDbAdapter {
 	 * Database creation sql statement
 	 */
 	private static final String DATABASE_CREATE =
-		"create table packages (id integer primary key autoincrement, "
+		"create table packages (_id integer primary key autoincrement, "
 		+ "trackingnumber text not null, status text);";
 
 	private static final String DATABASE_NAME = "pakketracker";
