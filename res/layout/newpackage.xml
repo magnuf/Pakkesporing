@@ -23,12 +23,5 @@
         android:layout_below="@id/entry"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dip"
-        android:text="Søk" />
- 		
- 	<TextView
-        android:id="@+id/output"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ok"
-        android:text=""/>
+        android:text="Legg til" />
 </RelativeLayout>

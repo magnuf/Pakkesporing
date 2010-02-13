@@ -13,6 +13,7 @@ public class PackagesDbAdapter {
 	public static final String KEY_NUMBER = "trackingnumber";
 	public static final String KEY_STATUS = "status";
 	public static final String KEY_ID = "_id";
+	public static final String KEY_CHANGED = "changed";
 
 	private static final String TAG = "PackagesDbAdapter";
 	private DatabaseHelper dbHelper;
@@ -23,7 +24,7 @@ public class PackagesDbAdapter {
 	 */
 	private static final String DATABASE_CREATE =
 		"create table packages (_id integer primary key autoincrement, "
-		+ "trackingnumber text not null, status text);";
+		+ "trackingnumber text not null, status text, changed integer);";
 
 	private static final String DATABASE_NAME = "pakketracker";
 	private static final String DATABASE_TABLE = "packages";
@@ -115,7 +116,7 @@ public class PackagesDbAdapter {
 	public Cursor fetchAllPackages() {
 
 		return db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_NUMBER,
-				KEY_STATUS}, null, null, null, null, KEY_ID+ "ASC");
+				KEY_STATUS, KEY_CHANGED}, null, null, null, null, KEY_ID+ " ASC");
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class PackagesDbAdapter {
 		Cursor mCursor =
 
 			db.query(true, DATABASE_TABLE, new String[] {KEY_ID,
-					KEY_NUMBER, KEY_STATUS}, KEY_ID + "=" + id, null,
+					KEY_NUMBER, KEY_STATUS, KEY_CHANGED}, KEY_ID + "=" + id, null,
 					null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -141,17 +142,18 @@ public class PackagesDbAdapter {
 
 	/**
 	 * Update the package using the details provided. The package to be updated is
-	 * specified using the id, and it is altered to use the title and body
+	 * specified using the id, and it is altered to use the status and changed
 	 * values passed in
 	 * 
 	 * @param id id of package to update
 	 * @param packagenumber value to set packagenumber to
 	 * @param status value to set package status to
+	 * @param changed Says if there is a new status, and what kind of status (new location, broken package etc)
 	 * @return true if the package was successfully updated, false otherwise
 	 */
-	public boolean updatePackage(long id, String packagenumber, String status) {
+	public boolean updatePackage(long id, String status, int changed) {
 		ContentValues args = new ContentValues();
-		args.put(KEY_NUMBER, packagenumber);
+		args.put(KEY_CHANGED, changed);
 		args.put(KEY_STATUS, status);
 
 		return db.update(DATABASE_TABLE, args, KEY_ID + "=" + id, null) > 0;

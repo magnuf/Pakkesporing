@@ -62,10 +62,6 @@ public class MainListView extends ListActivity {
     }
     */
     
-    private void createNote(String packagenumber) {
-        packageDbAdapter.createPackage(packagenumber);
-        fillData();
-    }
     
     private void fillData() {
         // Get all of the packages from the database and create the item list

@@ -54,6 +54,9 @@ public class NewPackageView extends Activity {
 					Intent i = new Intent(NewPackageView.this, MainListView.class);
 					startActivity(i);
 
+					Intent i = new Intent(NewPackageView.this, MainListView.class);
+					startActivity(i);
+
 				}
 			}
 		});
