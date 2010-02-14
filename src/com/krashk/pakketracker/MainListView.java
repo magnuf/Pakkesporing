@@ -1,15 +1,24 @@
 package com.krashk.pakketracker;
 
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class MainListView extends ListActivity {
 	
@@ -22,7 +31,6 @@ public class MainListView extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listpackages);
-        
         packageDbAdapter = new PackagesDbAdapter(this);
         packageDbAdapter.open();
         
@@ -39,7 +47,15 @@ public class MainListView extends ListActivity {
 			}
 		});
 
+        
+        AlarmManager mgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(this, TrackingService.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+        
+        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 20000, pi);
+        
     }
+
 
     
     @Override
@@ -68,25 +84,39 @@ public class MainListView extends ListActivity {
         Cursor c = packageDbAdapter.fetchAllPackages();
         startManagingCursor(c);
 
-        String[] from = new String[] { PackagesDbAdapter.KEY_STATUS, PackagesDbAdapter.KEY_NUMBER };
-        int[] to = new int[] {R.id.status, R.id.tracknumber};
+        String[] from = new String[] {PackagesDbAdapter.KEY_ID, PackagesDbAdapter.KEY_NUMBER,  PackagesDbAdapter.KEY_STATUS };
+        int[] to = new int[] {R.id.pkid, R.id.tracknumber, R.id.status};
         
         // Now create an array adapter and set it to display using our rowlayout
         SimpleCursorAdapter packages =
             new SimpleCursorAdapter(this, R.layout.listitem, c, from, to);
         setListAdapter(packages);
+        
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
 	protected void onListItemClick (ListView l, View v, int position, long id){
-//		HashMap<String,String> item = (HashMap<String, String>) getListView().getItemAtPosition(position);
-//		
-//		String result = item.get("filename");
-//		
-//		Intent resultIntent = new Intent();
-//		resultIntent.putExtra(PUBLIC_STATIC_STRING_IDENTIFIER, result );
-//		setResult(Activity.RESULT_OK, resultIntent);
-//		finish();
-	}
+    	Cursor items = (Cursor)getListView().getItemAtPosition(position);
+    	int packageid = items.getInt(items.getColumnIndex(PackagesDbAdapter.KEY_ID));
+    	String packageNumber = items.getString(items.getColumnIndex(PackagesDbAdapter.KEY_NUMBER));
+    	String oldStatus = items.getString(items.getColumnIndex(PackagesDbAdapter.KEY_STATUS));
+    	try {
+    		String newStatus = TrackingUtils.updateStatus(packageNumber, oldStatus);
+			if (newStatus != null){
+				packageDbAdapter.updatePackage(packageid, newStatus, R.attr.changed);
+				Toast.makeText(((View)l.getParent()).getContext(), "Endringer i pakkestatus!", Toast.LENGTH_SHORT).show();
+			}
+			else {
+				Toast.makeText(((View)l.getParent()).getContext(), "Ingen endringer i status", Toast.LENGTH_SHORT).show();
+			}
+			fillData();
+		} catch (ClientProtocolException e) {
+			Toast.makeText(((View) v.getParent()).getContext(), "Feil i HTTP-protokollen", Toast.LENGTH_SHORT).show();
+		} catch (IOException e) {
+			Toast.makeText(((View) v.getParent()).getContext(), "Feil ved tilkobling til nettverk/internett", Toast.LENGTH_SHORT).show();
+		}
+    	
+    }
 }
 
