@@ -36,6 +36,8 @@ public class MainListView extends ListActivity {
         
         fillData();
         
+        packageDbAdapter.close();
+        
         Button createNew = (Button) findViewById(R.id.newpackagebutton);
         
         createNew.setOnClickListener(new OnClickListener() {
@@ -50,9 +52,9 @@ public class MainListView extends ListActivity {
         
         AlarmManager mgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(this, TrackingService.class);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+        PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
         
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 20000, pi);
+        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 30000, pi);
         
     }
 

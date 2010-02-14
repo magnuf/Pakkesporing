@@ -3,6 +3,7 @@
       android:versionCode="1"
       android:versionName="1.0" package="com.krashk.pakketracker">
       <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.VIBRATE" />
       <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".MainListView"
                   android:label="@string/app_name">
@@ -14,9 +15,8 @@
         <activity android:name=".NewPackageView"
         		  android:label="@string/app_name">
 		</activity>
-		<activity android:name=".TrackingService"
-				  android:label="@string/app_name">
-		</activity>
+		<service android:name=".TrackingService">
+		</service>
     </application>
     <uses-sdk android:minSdkVersion="3" />
 	
