@@ -74,6 +74,7 @@ public class TrackingUtils {
 	
 	public static boolean updateAllPackages(PackagesDbAdapter packagesDbAdapter){
 		boolean hasChanged = false;
+		packagesDbAdapter.open();
 		Cursor c = packagesDbAdapter.fetchAllPackages();
 		if (c.moveToFirst()){
     		do {
@@ -94,6 +95,7 @@ public class TrackingUtils {
     		} while (c.moveToNext());
     	}
     	c.close();
+    	packagesDbAdapter.close();
     	return hasChanged;
 	}
 	

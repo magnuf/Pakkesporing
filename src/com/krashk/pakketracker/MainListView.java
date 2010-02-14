@@ -34,19 +34,15 @@ public class MainListView extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		packageDbAdapter = new PackagesDbAdapter(this);
 		showDialog(UPDATE_DIALOG);
+		
 		// Hack for å komme seg rundt at vi ikke vet om appen kjører
 		PackageTracker pt = ((PackageTracker)getApplicationContext());
 		pt.setAppRunning(true);
 
 		setContentView(R.layout.listpackages);
-		packageDbAdapter = new PackagesDbAdapter(this);
-		packageDbAdapter.open();
-
-		fillData();
-
-		packageDbAdapter.close();
-
+		
 		Button createNew = (Button) findViewById(R.id.newpackagebutton);
 		createNew.setOnClickListener(new OnClickListener() {
 
@@ -72,7 +68,8 @@ public class MainListView extends ListActivity {
 	public void onResume(){
 		super.onResume();
 		packageDbAdapter.open();
-
+		
+		
 		fillData();
 
 		packageDbAdapter.close();
