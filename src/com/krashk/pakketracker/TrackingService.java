@@ -32,27 +32,8 @@ public class TrackingService extends Service {
 			return;
 		}
 		
-    	Cursor c =  packagesDbAdapter.fetchAllPackages();
-    	boolean hasChanges = false;
-    	if (c.moveToFirst()){
-    		do {
-    			int packageid = c.getInt(c.getColumnIndex(PackagesDbAdapter.KEY_ID));
-    			String packageNumber = c.getString(c.getColumnIndex(PackagesDbAdapter.KEY_NUMBER));
-    			String oldStatus = c.getString(c.getColumnIndex(PackagesDbAdapter.KEY_STATUS));
-    			try {
-    				String newStatus = TrackingUtils.updateStatus(packageNumber, oldStatus);
-    				if (newStatus != null){
-    					packagesDbAdapter.updatePackage(packageid, newStatus, R.attr.changed);
-    					hasChanges = true;
-    				}
-    			} catch (ClientProtocolException e) {
-    				// No action needed
-    			} catch (IOException e) {
-    				// No action needed
-    			}
-    		} while (c.moveToNext());
-    	}
-    	c.close();
+    	boolean hasChanges = TrackingUtils.updateAllPackages(packagesDbAdapter);
+    	
     	if ( hasChanges ){
     		PackageTracker pt = ((PackageTracker)getApplicationContext());
             if (!pt.isAppRunning()){ // Vil ikke kjøre igang notifcation om appen er oppe og kjører

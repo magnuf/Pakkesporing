@@ -13,6 +13,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 
 public class TrackingUtils {
 
@@ -69,6 +70,31 @@ public class TrackingUtils {
 		else {
 			return newStatus;
 		}
+	}
+	
+	public static boolean updateAllPackages(PackagesDbAdapter packagesDbAdapter){
+		boolean hasChanged = false;
+		Cursor c = packagesDbAdapter.fetchAllPackages();
+		if (c.moveToFirst()){
+    		do {
+    			int packageid = c.getInt(c.getColumnIndex(PackagesDbAdapter.KEY_ID));
+    			String packageNumber = c.getString(c.getColumnIndex(PackagesDbAdapter.KEY_NUMBER));
+    			String oldStatus = c.getString(c.getColumnIndex(PackagesDbAdapter.KEY_STATUS));
+    			try {
+    				String newStatus = TrackingUtils.updateStatus(packageNumber, oldStatus);
+    				if (newStatus != null){
+    					packagesDbAdapter.updatePackage(packageid, newStatus, R.attr.changed);
+    					hasChanged = true;
+    				}
+    			} catch (ClientProtocolException e) {
+    				// No action needed
+    			} catch (IOException e) {
+    				// No action needed
+    			}
+    		} while (c.moveToNext());
+    	}
+    	c.close();
+    	return hasChanged;
 	}
 	
 	public static void updateTrackingService(Context context, long delay, int repeaterType){
