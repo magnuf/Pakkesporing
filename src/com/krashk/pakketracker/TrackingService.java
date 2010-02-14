@@ -1,6 +1,7 @@
 package com.krashk.pakketracker;
 
 import java.io.IOException;
+import java.security.acl.NotOwnerException;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -51,12 +52,14 @@ public class TrackingService extends Service {
 			Notification notification = new Notification(R.drawable.icon, "Ny status på sending", 0);
 			PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainListView.class), 0);
 			notification.setLatestEventInfo(this, "Statusendring for sending", "En av dine sendinger har endringer i status", pendingIntent);
-			notificationManager.notify(0, notification);
+			notificationManager.cancel(R.attr.notification_id); // Om det er nye endringer uten at bruker har sjekket, fjern forrige note.
+			notificationManager.notify(R.attr.notification_id, notification);
     	}
     }
 	@Override
 	public void onDestroy() {
 		packagesDbAdapter.close();
+		TrackingUtils.updateTrackingService(this, 30000, 0);
 	}
 
 	@Override

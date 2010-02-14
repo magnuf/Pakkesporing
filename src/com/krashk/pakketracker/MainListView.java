@@ -6,6 +6,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -49,16 +50,14 @@ public class MainListView extends ListActivity {
 			}
 		});
 
-        
-        AlarmManager mgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(this, TrackingService.class);
-        PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
-        
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 30000, pi);
-        
+        // Fjerne notification om vi kom hit via den
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		notificationManager.cancel(R.attr.notification_id);
+		
+		TrackingUtils.updateTrackingService(this, 30000, 0);
     }
 
-
+    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

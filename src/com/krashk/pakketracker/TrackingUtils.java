@@ -9,6 +9,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.SystemClock;
+
 public class TrackingUtils {
 
 
@@ -59,10 +67,17 @@ public class TrackingUtils {
 	
 		if (newStatus.equals(oldStatus)){
 			//return null; // no changes
-			return "TestStatus";
+			return "TestStatus"; // Testing purposes only
 		}
 		else {
 			return newStatus;
 		}
+	}
+	
+	public static void updateTrackingService(Context context, long delay, int repeaterType){
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, TrackingService.class);
+        PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+        mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
 	}
 }

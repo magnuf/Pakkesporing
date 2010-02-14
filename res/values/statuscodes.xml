@@ -5,4 +5,5 @@
 <item format="integer" name="error" type="attr">3</item>
 <item format="integer" name="uninitialized" type="attr">4</item>
 <item format="integer" name="unchanged" type="attr">5</item>
+<item type="attr" name="notification_id" format="integer">999</item>
 </resources>
