@@ -9,8 +9,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.IBinder;
 
 public class TrackingService extends Service {
@@ -26,6 +28,11 @@ public class TrackingService extends Service {
 	
 	@Override
     public void onStart(Intent intent, int startId) {
+		//if background data is disabled, don't do anything
+		if(!((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getBackgroundDataSetting()){
+			return;
+		}
+		
     	Cursor c =  packagesDbAdapter.fetchAllPackages();
     	boolean hasChanges = false;
     	if (c.moveToFirst()){

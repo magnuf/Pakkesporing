@@ -5,4 +5,6 @@
     <string name="refresh">Oppdater</string>
     <string name="settings">Innstillinger</string>
     <string name="empty">Vennligst skriv inn et nummer</string>
+    <string name="notificationpref">notificationPref</string>
+    <string name="intervalVal">intervalVal</string>
 </resources>

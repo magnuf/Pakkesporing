@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources> 
+	<string-array name="update_intervals"> 
+        <item>Manuelt</item> 
+        <item>30 minutter</item> 
+        <item>1 time</item> 
+        <item>5 timer</item> 
+        <item>12 timer</item> 
+        <item>24 timer</item> 
+	</string-array> 
+	<string-array name="update_interval_values"> 
+        <item>0</item> 
+        <item>30</item> 
+        <item>60</item> 
+        <item>300</item> 
+        <item>720</item> 
+        <item>1440</item> 
+	</string-array> 
+</resources>

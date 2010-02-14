@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+  
+  <ListPreference android:title="Oppdateringsintervall"
+  	android:summary="Velg hvor ofte automatiske oppdateringer skal gjøres"
+  	android:entries="@array/update_intervals" 
+  	android:entryValues="@array/update_interval_values"
+  	android:key="@string/intervalVal"
+  	android:defaultValue="0"
+  />
+  <CheckBoxPreference 
+  	android:title="Varsling"
+  	android:defaultValue="true"
+  	android:summary="Varsling om nye hendelser"
+  	android:key="@string/notificationpref"
+  />
+  
+  
+</PreferenceScreen>

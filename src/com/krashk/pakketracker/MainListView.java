@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -67,17 +68,17 @@ public class MainListView extends ListActivity {
         return result;
     }
     
-    /*
-    @Override
+    
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
-        case INSERT_ID:
-            createNote();
-            return true;
+        case SETTINGS_ID:
+        	Intent i = new Intent(MainListView.this, PreferenceView.class);
+			startActivity(i);
+			break;
         }
         return super.onOptionsItemSelected(item);
     }
-    */
+    
     
     
     private void fillData() {
