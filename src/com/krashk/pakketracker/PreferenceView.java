@@ -31,7 +31,6 @@ public class PreferenceView extends PreferenceActivity {
 //					ServiceStarter.startService(ConfigView.this, mDbAdapter, newInterval);
 //				}
  
-				Toast.makeText(PreferenceView.this, newValue.toString(), Toast.LENGTH_LONG);
 				return true;
 			}
 		});
@@ -39,6 +38,16 @@ public class PreferenceView extends PreferenceActivity {
 		CheckBoxPreference notificationsPref = (CheckBoxPreference)findPreference(getString(R.string.notificationpref));
 		
 		notificationsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference arg0, Object arg1) {
+				return true;
+			}
+		});
+		
+		CheckBoxPreference updatePref = (CheckBoxPreference)findPreference(getString(R.string.updatePref));
+		
+		updatePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			
 			@Override
 			public boolean onPreferenceChange(Preference arg0, Object arg1) {

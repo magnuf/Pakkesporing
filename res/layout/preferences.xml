@@ -16,6 +16,12 @@
   	android:summary="Varsling om nye hendelser"
   	android:key="@string/notificationpref"
   />
+  <CheckBoxPreference 
+  	android:title="Oppdatering"
+  	android:defaultValue="false"
+  	android:summary="Oppdatere når programmet åpner"
+  	android:key="@string/updatePref"
+  />
   
   
 </PreferenceScreen>
