@@ -121,7 +121,7 @@ public class MainListView extends ListActivity {
 					TrackingUtils.updateAllPackages(MainListView.this.packageDbAdapter);
 				}
 			})
-			.setNegativeButton("Nei, ikke spør meg igjen", new DialogInterface.OnClickListener() {
+			.setNegativeButton("Ikke spør meg igjen", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int arg1) {
@@ -129,6 +129,13 @@ public class MainListView extends ListActivity {
 					SharedPreferences.Editor editor = settings.edit();
 					editor.putBoolean("updatePref", false);
 					editor.commit();
+					dialog.cancel();
+				}
+			})
+			.setNeutralButton("Nei", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int arg1) {
 					dialog.cancel();
 				}
 			});
