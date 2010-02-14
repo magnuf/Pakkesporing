@@ -98,7 +98,13 @@ public class MainListView extends ListActivity {
     
     @Override
 	protected void onListItemClick (ListView l, View v, int position, long id){
+    	packageDbAdapter.open();
     	Cursor items = (Cursor)getListView().getItemAtPosition(position);
+    	if (items == null){
+    		Toast.makeText(((View) l.getParent()).getContext(), "Databasefeil", Toast.LENGTH_SHORT).show();
+    		packageDbAdapter.close();
+    		return;
+    	}
     	int packageid = items.getInt(items.getColumnIndex(PackagesDbAdapter.KEY_ID));
     	String packageNumber = items.getString(items.getColumnIndex(PackagesDbAdapter.KEY_NUMBER));
     	String oldStatus = items.getString(items.getColumnIndex(PackagesDbAdapter.KEY_STATUS));
@@ -113,10 +119,13 @@ public class MainListView extends ListActivity {
 			}
 			fillData();
 		} catch (ClientProtocolException e) {
-			Toast.makeText(((View) v.getParent()).getContext(), "Feil i HTTP-protokollen", Toast.LENGTH_SHORT).show();
+			Toast.makeText(((View) l.getParent()).getContext(), "Feil i HTTP-protokollen", Toast.LENGTH_SHORT).show();
 		} catch (IOException e) {
-			Toast.makeText(((View) v.getParent()).getContext(), "Feil ved tilkobling til nettverk/internett", Toast.LENGTH_SHORT).show();
+			Toast.makeText(((View) l.getParent()).getContext(), "Feil ved tilkobling til nettverk/internett", Toast.LENGTH_SHORT).show();
+		} finally {
+			packageDbAdapter.close();
 		}
+		
     	
     }
 }

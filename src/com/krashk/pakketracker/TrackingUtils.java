@@ -43,6 +43,16 @@ public class TrackingUtils {
 		startIndex = responseBody.indexOf("<div class=\"sporing-sendingandkolli-latestevent-date\">", startIndex);
 		endIndex = responseBody.indexOf("</div>", startIndex);
 	
+		if (startIndex == -1){
+            // no results
+            newStatus = "Ugyldig sendingsnummer eller tjenestefeil";
+            if (newStatus.equals(oldStatus)){
+    			return null; // no changes
+    		}
+    		else {
+    			return newStatus;
+    		}
+		}
 		// remove all tags, whitespace - and trim
 		newStatus += " " + responseBody.substring(startIndex, endIndex)
 			.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();

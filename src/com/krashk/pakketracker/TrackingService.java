@@ -48,7 +48,7 @@ public class TrackingService extends Service {
     	c.close();
     	if ( hasChanges ){
     		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-			Notification notification = new Notification(R.drawable.icon, "Test", 0);
+			Notification notification = new Notification(R.drawable.icon, "Ny status på sending", 0);
 			PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainListView.class), 0);
 			notification.setLatestEventInfo(this, "Statusendring for sending", "En av dine sendinger har endringer i status", pendingIntent);
 			notificationManager.notify(0, notification);
