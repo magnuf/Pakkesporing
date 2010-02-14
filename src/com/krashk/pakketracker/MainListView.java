@@ -4,16 +4,11 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.preference.CheckBoxPreference;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +28,10 @@ public class MainListView extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Hack for å komme seg rundt at vi ikke vet om appen kjører
+        PackageTracker pt = ((PackageTracker)getApplicationContext());
+        pt.setAppRunning(true);
+        
         setContentView(R.layout.listpackages);
         packageDbAdapter = new PackagesDbAdapter(this);
         packageDbAdapter.open();
@@ -72,6 +71,8 @@ public class MainListView extends ListActivity {
     public void onDestroy(){
     	super.onDestroy();
     	TrackingUtils.updateTrackingService(this, 30000, 0);
+    	PackageTracker pt = ((PackageTracker)getApplicationContext());
+        pt.setAppRunning(false);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

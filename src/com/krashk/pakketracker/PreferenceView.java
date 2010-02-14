@@ -7,7 +7,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.text.format.DateUtils;
 import android.widget.Toast;
 
 public class PreferenceView extends PreferenceActivity {

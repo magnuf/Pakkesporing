@@ -1,7 +1,6 @@
 package com.krashk.pakketracker;
 
 import java.io.IOException;
-import java.security.acl.NotOwnerException;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -55,12 +54,15 @@ public class TrackingService extends Service {
     	}
     	c.close();
     	if ( hasChanges ){
-    		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-			Notification notification = new Notification(R.drawable.icon, "Ny status på sending", 0);
-			PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainListView.class), 0);
-			notification.setLatestEventInfo(this, "Statusendring for sending", "En av dine sendinger har endringer i status", pendingIntent);
-			notificationManager.cancel(R.attr.notification_id); // Om det er nye endringer uten at bruker har sjekket, fjern forrige note.
-			notificationManager.notify(R.attr.notification_id, notification);
+    		PackageTracker pt = ((PackageTracker)getApplicationContext());
+            if (!pt.isAppRunning()){ // Vil ikke kjøre igang notifcation om appen er oppe og kjører
+	    		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				Notification notification = new Notification(R.drawable.icon, "Ny status på sending", 0);
+				PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainListView.class), 0);
+				notification.setLatestEventInfo(this, "Statusendring for sending", "En av dine sendinger har endringer i status", pendingIntent);
+				notificationManager.cancel(R.attr.notification_id); // Om det er nye endringer uten at bruker har sjekket, fjern forrige note.
+				notificationManager.notify(R.attr.notification_id, notification);
+            }
     	}
     }
 	@Override
