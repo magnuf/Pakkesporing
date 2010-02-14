@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.CheckBoxPreference;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +42,6 @@ public class MainListView extends ListActivity {
         packageDbAdapter.close();
         
         Button createNew = (Button) findViewById(R.id.newpackagebutton);
-        
         createNew.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -55,11 +55,24 @@ public class MainListView extends ListActivity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.cancel(R.attr.notification_id);
 		
-		TrackingUtils.updateTrackingService(this, 30000, 0);
+		TrackingUtils.stopTrackingService(this);
     }
 
+    @Override
+    public void onResume(){
+    	super.onResume();
+    	packageDbAdapter.open();
+        
+        fillData();
+        
+        packageDbAdapter.close();
+    }
     
-    
+    @Override
+    public void onDestroy(){
+    	super.onDestroy();
+    	TrackingUtils.updateTrackingService(this, 30000, 0);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	boolean result = super.onCreateOptionsMenu(menu);

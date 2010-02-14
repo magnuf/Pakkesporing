@@ -77,4 +77,11 @@ public class TrackingUtils {
         PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
         mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
 	}
+	
+	public static void stopTrackingService(Context context){
+		AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		Intent i = new Intent(context, TrackingService.class);
+		PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+		mgr.cancel(pi);
+	}
 }
