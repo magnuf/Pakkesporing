@@ -63,7 +63,7 @@ public class MainListView extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, REFRESH_ID, 0, R.string.refresh).setIcon(android.R.drawable.ic_menu_search);
+        menu.add(0, REFRESH_ID, 0, R.string.refresh).setIcon(android.R.drawable.ic_popup_sync);
         menu.add(0, SETTINGS_ID, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
         return result;
     }
@@ -96,8 +96,7 @@ public class MainListView extends ListActivity {
         
     }
     
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	protected void onListItemClick (ListView l, View v, int position, long id){
     	Cursor items = (Cursor)getListView().getItemAtPosition(position);
     	int packageid = items.getInt(items.getColumnIndex(PackagesDbAdapter.KEY_ID));
