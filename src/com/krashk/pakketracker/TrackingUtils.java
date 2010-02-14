@@ -28,7 +28,7 @@ public class TrackingUtils {
 		if(startIndex == -1) {
              // no results
              newStatus = "Ugyldig sendingsnummer eller tjenestefeil";
-             if (oldStatus.equals(newStatus)){
+             if (newStatus.equals(oldStatus)){
      			return null; // no changes
      		}
      		else {
@@ -47,7 +47,7 @@ public class TrackingUtils {
 		newStatus += " " + responseBody.substring(startIndex, endIndex)
 			.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();
 	
-		if (oldStatus.equals(newStatus)){
+		if (newStatus.equals(oldStatus)){
 			//return null; // no changes
 			return "TestStatus";
 		}
