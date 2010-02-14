@@ -67,12 +67,7 @@ public class MainListView extends ListActivity {
 	@Override
 	public void onResume(){
 		super.onResume();
-		packageDbAdapter.open();
-		
-		
 		fillData();
-
-		packageDbAdapter.close();
 	}
 
 	@Override
@@ -99,6 +94,7 @@ public class MainListView extends ListActivity {
 			break;
 		case REFRESH_ID:
 			TrackingUtils.updateAllPackages(packageDbAdapter);
+			fillData();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -115,7 +111,9 @@ public class MainListView extends ListActivity {
 
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					TrackingUtils.updateAllPackages(MainListView.this.packageDbAdapter);
+					if (TrackingUtils.updateAllPackages(MainListView.this.packageDbAdapter)){ 
+						fillData();
+					}
 				}
 			})
 			.setNegativeButton("Ikke spør meg igjen", new DialogInterface.OnClickListener() {
@@ -147,6 +145,7 @@ public class MainListView extends ListActivity {
 
 	private void fillData() {
 		// Get all of the packages from the database and create the item list
+		packageDbAdapter.open();
 		Cursor c = packageDbAdapter.fetchAllPackages();
 		startManagingCursor(c);
 
@@ -157,6 +156,7 @@ public class MainListView extends ListActivity {
 		SimpleCursorAdapter packages =
 			new SimpleCursorAdapter(this, R.layout.listitem, c, from, to);
 		setListAdapter(packages);
+		packageDbAdapter.close();
 
 	}
 
