@@ -41,10 +41,11 @@ public class MainListView extends ListActivity {
 		super.onCreate(savedInstanceState);
 		packageDbAdapter = new PackagesDbAdapter(this);
 		
+		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean update = prefs.getBoolean("updatePref", false);
 		if (update){
-			showDialog(UPDATE_DIALOG);
+			TrackingUtils.updateAllPackages(packageDbAdapter);
 		}
 		
 		// Hack for å komme seg rundt at vi ikke vet om appen kjører
@@ -120,43 +121,7 @@ public class MainListView extends ListActivity {
 	}
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		switch(id){
-		case UPDATE_DIALOG:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-			builder.setMessage("Vil du oppdatere pakkestatusene dine?")
-			.setCancelable(false)
-			.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					if (TrackingUtils.updateAllPackages(MainListView.this.packageDbAdapter)){ 
-						fillData();
-					}
-				}
-			})
-			.setNegativeButton("Ikke spør meg igjen", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int arg1) {
-					SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainListView.this);
-					SharedPreferences.Editor editor = settings.edit();
-					editor.putBoolean("updatePref", false);
-					editor.commit();
-					dialog.cancel();
-				}
-			})
-			.setNeutralButton("Nei", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int arg1) {
-					dialog.cancel();
-				}
-			});
-			
-			AlertDialog alert = builder.create();
-			return alert;
-			
+		switch(id){		
 		case DELETE_ID:
 			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 			builder2.setMessage("Vil du slette denne pakken?")
