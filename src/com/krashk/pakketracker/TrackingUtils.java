@@ -66,8 +66,8 @@ public class TrackingUtils {
 			.replaceAll("\\<.*?\\>","").replaceAll("\\s+", " ").trim();
 	
 		if (newStatus.equals(oldStatus)){
-			//return null; // no changes
-			return "TestStatus"; // Testing purposes only
+			return null; // no changes
+			//return "TestStatus"; // Testing purposes only
 		}
 		else {
 			return newStatus;

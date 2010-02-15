@@ -18,18 +18,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class MainListView extends ListActivity {
 
 	public static final int UPDATE_DIALOG = 1;
+	public static final int DELETE_ID = 2;
 	public static final int REFRESH_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST +1;
 	private PackagesDbAdapter packageDbAdapter;
 
+	private int toBeDeletedPosition;
+	
 	/**	 Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,8 +55,6 @@ public class MainListView extends ListActivity {
 		
 		Button createNew = (Button) findViewById(R.id.newpackagebutton);
 		createNew.setOnClickListener(new OnClickListener() {
-
-
 			@Override
 			public void onClick(View arg0) {
 				Intent i = new Intent(MainListView.this, NewPackageView.class);
@@ -59,6 +62,17 @@ public class MainListView extends ListActivity {
 			}
 		});
 
+		getListView().setOnItemLongClickListener( new OnItemLongClickListener (){
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				toBeDeletedPosition = position;
+				showDialog(DELETE_ID);
+				return true;
+			}
+		});
+
+		
+		
 		// Fjerne notification om vi kom hit via den
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.cancel(R.attr.notification_id);
@@ -143,7 +157,35 @@ public class MainListView extends ListActivity {
 			AlertDialog alert = builder.create();
 			return alert;
 			
-
+		case DELETE_ID:
+			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+			builder2.setMessage("Vil du slette denne pakken?")
+				.setCancelable(true)
+				.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int arg1){
+						MainListView.this.packageDbAdapter.open();
+						Cursor items = (Cursor)getListView().getItemAtPosition(MainListView.this.toBeDeletedPosition);
+						if (items == null){
+							Toast.makeText(MainListView.this, "Databasefeil", Toast.LENGTH_SHORT).show();
+							packageDbAdapter.close();
+							return;
+						}
+						int packageid = items.getInt(items.getColumnIndex(PackagesDbAdapter.KEY_ID));
+						MainListView.this.packageDbAdapter.deletePackage(packageid);
+						fillData();
+						packageDbAdapter.close();
+						dialog.cancel();
+					}
+				})
+				.setNegativeButton("Nei", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int arg1){
+						dialog.cancel();
+					}
+				});
+				AlertDialog alert2 = builder2.create();
+				return alert2;
 		}
 		return null;
 	}
@@ -194,8 +236,7 @@ public class MainListView extends ListActivity {
 		} finally {
 			packageDbAdapter.close();
 		}
-
-
 	}
+	
 }
 
