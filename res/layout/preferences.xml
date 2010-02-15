@@ -18,7 +18,7 @@
   />
   <CheckBoxPreference 
   	android:title="Oppdatering"
-  	android:defaultValue="false"
+  	android:defaultValue="true"
   	android:summary="Oppdatere når programmet åpner"
   	android:key="@string/updatePref"
   />
