@@ -1,6 +1,7 @@
 package com.krashk.pakketracker;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -17,12 +18,11 @@ public class PreferenceView extends PreferenceActivity {
     	super.onCreate(savedInstanceState);
     	addPreferencesFromResource(R.layout.preferences);
     	
-
+    	
 
 		ListPreference intervalPref = (ListPreference)findPreference(getString(R.string.intervalVal));
 		intervalPref.setEnabled(((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getBackgroundDataSetting());
- 
- 
+		
 		intervalPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -30,6 +30,7 @@ public class PreferenceView extends PreferenceActivity {
 //				if (newInterval != ServiceStarter.getCurrentInterval()) {
 //					ServiceStarter.startService(ConfigView.this, mDbAdapter, newInterval);
 //				}
+				
  
 				return true;
 			}
