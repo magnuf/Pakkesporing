@@ -35,7 +35,12 @@ public class MainListView extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		packageDbAdapter = new PackagesDbAdapter(this);
-		showDialog(UPDATE_DIALOG);
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean update = prefs.getBoolean("updatePref", false);
+		if (update){
+			showDialog(UPDATE_DIALOG);
+		}
 		
 		// Hack for å komme seg rundt at vi ikke vet om appen kjører
 		PackageTracker pt = ((PackageTracker)getApplicationContext());

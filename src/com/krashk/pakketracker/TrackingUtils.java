@@ -103,17 +103,12 @@ public class TrackingUtils {
 	
 	public static void updateTrackingService(Context context, long delay, int repeaterType){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		try {
-			boolean useRepeatingUpdates = prefs.getBoolean("notificationPref", true);
-			if (useRepeatingUpdates){
-				AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-				Intent i = new Intent(context, TrackingService.class);
-				PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
-				mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		boolean useRepeatingUpdates = prefs.getBoolean("notificationPref", true);
+		if (useRepeatingUpdates){
+			AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+			Intent i = new Intent(context, TrackingService.class);
+			PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+			mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
 		}
 	}
 	
