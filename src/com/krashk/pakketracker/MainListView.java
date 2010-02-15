@@ -93,7 +93,7 @@ public class MainListView extends ListActivity {
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		TrackingUtils.updateTrackingService(this, 30000, 0);
+		TrackingUtils.updateTrackingService(this);
 		PackageTracker pt = ((PackageTracker)getApplicationContext());
 		pt.setAppRunning(false);
 	}

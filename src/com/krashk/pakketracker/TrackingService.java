@@ -44,8 +44,7 @@ public class TrackingService extends Service {
 	@Override
 	public void onDestroy() {
 		packagesDbAdapter.close();
-		PackageTracker pt = ((PackageTracker)getApplicationContext());
-		TrackingUtils.updateTrackingService(this, 30000, 0);
+		TrackingUtils.updateTrackingService(this);
 	}
 
 	@Override

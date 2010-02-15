@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 
 public class TrackingUtils {
 
@@ -101,14 +102,14 @@ public class TrackingUtils {
     	return hasChanged;
 	}
 	
-	public static void updateTrackingService(Context context, long delay, int repeaterType){
+	public static void updateTrackingService(Context context){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		boolean useRepeatingUpdates = prefs.getBoolean("notificationPref", true);
-		if (useRepeatingUpdates){
+		int intervalValPref = Integer.parseInt(prefs.getString("intervalVal", "0"));
+		if (intervalValPref > 0){
 			AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 			Intent i = new Intent(context, TrackingService.class);
 			PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
-			mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pi);
+			mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS, pi);
 		}
 	}
 	
