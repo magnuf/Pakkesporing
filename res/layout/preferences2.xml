@@ -2,6 +2,7 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
   
+  
   <ListPreference android:title="Oppdateringsintervall"
   	android:summary="Velg hvor ofte automatiske oppdateringer skal gjøres"
   	android:entries="@array/update_intervals" 
@@ -28,19 +29,12 @@
   	android:key="@string/autostartPref"
   />
   <CheckBoxPreference 
-  	android:title="Oppdateringshvile"
+  	android:title="Natthvile"
   	android:defaultValue="true"
-  	android:summary="Ikke se etter oppdateringer utenom bestemt intervall"
+  	android:summary="Ikke se etter oppdateringer om natten"
   	android:key="@string/nightmodePref"
   />
-  <TimePickerPreference
-  	android:title="Start"
-  	android:summary="Når den skal starte å se etter oppdateringer"
-  	android:key="@string/updateintervalDayPref"
-  />
-  <TimePickerPreference
-  	android:title="Stopp"
-  	android:summary="Når den skal slutte å se etter oppdateringer"
-  	android:key="@string/updateintervalNightPref"
-  />
+  
+  
+  
 </PreferenceScreen>

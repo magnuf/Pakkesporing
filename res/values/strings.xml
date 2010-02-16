@@ -8,4 +8,8 @@
     <string name="notificationpref">notificationPref</string>
     <string name="intervalVal">intervalVal</string>
     <string name="updatePref">updatePref</string>
+    <string name="autostartPref">autostartPref</string>
+    <string name="nightmodePref">nightmodePref</string>
+    <string name="updateintervalDayPref">updateintervalDayPref</string>
+    <string name="updateintervalNightPref">updateintervalNightPref</string>
 </resources>
