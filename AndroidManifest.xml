@@ -9,6 +9,7 @@
       			   android:icon="@drawable/icon" 
       			   android:label="@string/app_name">
         <activity android:name=".MainListView"
+        		android:screenOrientation="sensor"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,9 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewPackageView"
+				android:screenOrientation="sensor"
         		  android:label="@string/app_name">
 		</activity>
         <activity android:name=".PreferenceView"
+      			  android:screenOrientation="sensor"
         		  android:label="@string/app_name">
 		</activity>
 		<service android:name=".TrackingService">
