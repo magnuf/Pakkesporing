@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:pt="http://schemas.android.com/apk/res/com.krashk.pakketracker">
+  xmlns:android="http://schemas.android.com/apk/res/android">
   
   <ListPreference android:title="Oppdateringsintervall"
   	android:summary="Velg hvor ofte automatiske oppdateringer skal gjøres"
@@ -34,19 +33,20 @@
   	android:summary="Ikke se etter oppdateringer utenom bestemt intervall"
   	android:key="@string/nightmodePref"
   />
-  <TimePickerPreference
+  <EditTextPreference
   	android:title="Start"
-	pt:defaultTime="08:00"
+	android:defaultValue="08:00"
+	android:inputType="number"
   	android:dependency="@string/nightmodePref"
   	android:summary="Når den skal starte å se etter oppdateringer"
   	android:key="@string/updateintervalDayPref"
   />
-  <TimePickerPreference
+  <EditTextPreference
   	android:title="Stopp"
-	pt:defaultTime="22:00"
+	android:defaultValue="22:00"
+	android:inputType="number" 
   	android:dependency="@string/nightmodePref"
   	android:summary="Når den skal slutte å se etter oppdateringer"
   	android:key="@string/updateintervalNightPref"
   />
- 
 </PreferenceScreen>

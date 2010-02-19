@@ -4,17 +4,19 @@
 // Please note this must be the package if you want to use XML-based preferences
 package android.preference;
  
+import com.krashk.pakketracker.R;
+
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
-import android.widget.Toast;
  
 /**
  * A preference type that allows a user to choose a time
  */
-public class TimePickerPreference extends DialogPreference implements
-		TimePicker.OnTimeChangedListener {
+public class TimePickerPreference extends DialogPreference implements TimePicker.OnTimeChangedListener {
  
 	/**
 	 * The validation expression for this preference
@@ -25,6 +27,7 @@ public class TimePickerPreference extends DialogPreference implements
 	 * The default value for this preference
 	 */
 	private String defaultValue;
+	
  
 	/**
 	 * @param context
@@ -32,7 +35,7 @@ public class TimePickerPreference extends DialogPreference implements
 	 */
 	public TimePickerPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		initialize();
+		initialize(attrs);
 	}
  
 	/**
@@ -43,13 +46,21 @@ public class TimePickerPreference extends DialogPreference implements
 	public TimePickerPreference(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
-		initialize();
+		initialize(attrs);
 	}
  
 	/**
 	 * Initialize this preference
 	 */
-	private void initialize() {
+	private void initialize(AttributeSet attrs) {
+		TypedArray a = getContext().obtainStyledAttributes(attrs,R.styleable.TimePickerPreference);
+		defaultValue = a.getString(R.styleable.TimePickerPreference_defaultTime);
+		
+		//If getPersistedString returns the defaultvalue
+		if(getPersistedString(defaultValue).equals(defaultValue)){
+			persistString(defaultValue);
+			
+		}
 		setPersistent(true);
 	}
  
@@ -63,6 +74,8 @@ public class TimePickerPreference extends DialogPreference implements
  
 		TimePicker tp = new TimePicker(getContext());
 		tp.setOnTimeChangedListener(this);
+		tp.setIs24HourView(true);
+		
  
 		int h = getHour();
 		int m = getMinute();
