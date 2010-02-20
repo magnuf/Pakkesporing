@@ -2,16 +2,15 @@
 //and modified to fit
 
 // Please note this must be the package if you want to use XML-based preferences
-package android.preference;
+package com.krashk.pakketracker;
  
-import com.krashk.pakketracker.R;
-
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
+import android.widget.Toast;
  
 /**
  * A preference type that allows a user to choose a time
@@ -53,15 +52,11 @@ public class TimePickerPreference extends DialogPreference implements TimePicker
 	 * Initialize this preference
 	 */
 	private void initialize(AttributeSet attrs) {
+		setPersistent(true);
 		TypedArray a = getContext().obtainStyledAttributes(attrs,R.styleable.TimePickerPreference);
 		defaultValue = a.getString(R.styleable.TimePickerPreference_defaultTime);
 		
-		//If getPersistedString returns the defaultvalue
-		if(getPersistedString(defaultValue).equals(defaultValue)){
-			persistString(defaultValue);
-			
-		}
-		setPersistent(true);
+	
 	}
  
 	/*
@@ -71,12 +66,14 @@ public class TimePickerPreference extends DialogPreference implements TimePicker
 	 */
 	@Override
 	protected View onCreateDialogView() {
+		String temp = getPersistedString(defaultValue);
  
 		TimePicker tp = new TimePicker(getContext());
 		tp.setOnTimeChangedListener(this);
 		tp.setIs24HourView(true);
 		
- 
+		persistString(temp);
+		
 		int h = getHour();
 		int m = getMinute();
 		if (h >= 0 && m >= 0) {
@@ -96,7 +93,7 @@ public class TimePickerPreference extends DialogPreference implements TimePicker
 	 */
 	@Override
 	public void onTimeChanged(TimePicker view, int hour, int minute) {
- 
+		
 		persistString(hour + ":" + minute);
 	}
  
