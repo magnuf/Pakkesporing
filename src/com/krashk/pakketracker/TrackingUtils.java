@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
+import android.text.format.Time;
 
 public class TrackingUtils {
 
@@ -106,10 +107,38 @@ public class TrackingUtils {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		int intervalValPref = Integer.parseInt(prefs.getString("intervalVal", "0"));
 		if (intervalValPref > 0){
+			long nextUpdate;
+			if(prefs.getBoolean("nightmodePref", true)){
+				Time nextTime = new Time();
+
+				String daytime = prefs.getString("updateintervalDayPref", "08:00");
+				String nighttime = prefs.getString("updateintervalNightPref", "22:00");
+				int nighttimehour = Integer.parseInt(nighttime.split(":")[0]);
+//				int nighttimeminute = Integer.parseInt(nighttime.split(":")[1]);
+				int daytimehour = Integer.parseInt(daytime.split(":")[0]);
+				int daytimeminute = Integer.parseInt(daytime.split(":")[1]);
+
+				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
+				
+				int nextday =0;
+				if(nighttimehour>daytimehour)
+					nextday=1;
+				
+				int nextyear =0;
+				if(nextTime.monthDay == 31 && nextTime.month == 11)
+					nextyear = 1;
+				
+				if(nextTime.hour>nighttimehour || nextTime.hour < daytimehour){
+					nextTime.set(00, daytimeminute, daytimehour, nextTime.monthDay+nextday, nextTime.month, nextTime.year + nextyear);
+				}
+				nextUpdate = nextTime.toMillis(false);
+			}else{
+				nextUpdate = System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS;
+			}
 			AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 			Intent i = new Intent(context, TrackingService.class);
 			PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
-			mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS, pi);
+			mgr.set(AlarmManager.RTC_WAKEUP, nextUpdate, pi);
 		}
 	}
 	
