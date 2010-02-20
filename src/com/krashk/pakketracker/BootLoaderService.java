@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BootLoaderService extends BroadcastReceiver{
@@ -14,7 +16,10 @@ public class BootLoaderService extends BroadcastReceiver{
 	public void onReceive(Context context, Intent intent) {
 		// just make sure we are getting the right intent (better safe than sorry)
 		if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
-			TrackingUtils.updateTrackingService(context);
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			if (prefs.getBoolean("autostartPref", false)) {
+				TrackingUtils.updateTrackingService(context);
+			}
 		} else {
 			Log.e(TAG, "Received unexpected intent " + intent.toString());
 		}
