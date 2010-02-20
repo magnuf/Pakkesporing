@@ -1,6 +1,9 @@
 package com.krashk.pakketracker;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -22,6 +25,8 @@ import android.text.format.Time;
 public class TrackingUtils {
 
 
+	private static SimpleDateFormat tidsFormat = new SimpleDateFormat("HH:mm");
+	
 	public static String updateStatus(String packageNumber, String oldStatus) throws ClientProtocolException, IOException {	
 		HttpClient client = new DefaultHttpClient();
 		HttpGet get = new HttpGet("http://sporing.posten.no/sporing.html?q="+packageNumber);
@@ -102,7 +107,6 @@ public class TrackingUtils {
     	packagesDbAdapter.close();
     	return hasChanged;
 	}
-	
 	public static void updateTrackingService(Context context){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		int intervalValPref = Integer.parseInt(prefs.getString("intervalVal", "0"));
@@ -110,26 +114,27 @@ public class TrackingUtils {
 			long nextUpdate;
 			if(prefs.getBoolean("nightmodePref", true)){
 				Time nextTime = new Time();
-
-				String daytime = prefs.getString("updateintervalDayPref", "08:00");
-				String nighttime = prefs.getString("updateintervalNightPref", "22:00");
-				int nighttimehour = Integer.parseInt(nighttime.split(":")[0]);
-//				int nighttimeminute = Integer.parseInt(nighttime.split(":")[1]);
-				int daytimehour = Integer.parseInt(daytime.split(":")[0]);
-				int daytimeminute = Integer.parseInt(daytime.split(":")[1]);
-
+				Date now = new Date();
+				Time dayTime = new Time();
+				Time nightTime = new Time();
+				
+				Date dayDate; 
+				Date nightDate;
+				try {
+					dayDate = tidsFormat.parse(prefs.getString("updateintervalDayPref", "08:00"));
+					nightDate = tidsFormat.parse(prefs.getString("updateintervalNightPref", "22:00"));
+				} catch (ParseException e) {
+					throw new RuntimeException("Feil ved parsing av dato-preferanse");
+				}
+				nightTime.set(0, nightDate.getMinutes(), nightDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
+				dayTime.set(0, dayDate.getMinutes(), dayDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
+				if ( nightDate.after(dayDate)) {
+					dayTime.set(dayTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+				}
+				
 				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
-				
-				int nextday =0;
-				if(nighttimehour>daytimehour)
-					nextday=1;
-				
-				int nextyear =0;
-				if(nextTime.monthDay == 31 && nextTime.month == 11)
-					nextyear = 1;
-				
-				if(nextTime.hour>nighttimehour || nextTime.hour < daytimehour){
-					nextTime.set(00, daytimeminute, daytimehour, nextTime.monthDay+nextday, nextTime.month, nextTime.year + nextyear);
+				if(nextTime.after(nightTime) && nextTime.before(dayTime)){
+					nextTime.set(dayTime.toMillis(false));
 				}
 				nextUpdate = nextTime.toMillis(false);
 			}else{
