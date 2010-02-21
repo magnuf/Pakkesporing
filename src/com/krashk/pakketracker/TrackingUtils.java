@@ -134,23 +134,35 @@ public class TrackingUtils {
 				
 
 				boolean nightUpdate = stopTime.before(startTime);
-				while (startTime.before(nextTime) && stopTime.before(nextTime)){ // loope til nextTime er mellom grensene
+				if (startTime.after(nextTime) && stopTime.after(nextTime)){
 					if (!nightUpdate){
-						startTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+						// next -> start ->  stopp , sett next til start 
+						nextTime.set(startTime.toMillis(false));
 					}
-					else { // STOP er før i tid
-						stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+					else {
+						// next -> stop -> start -> gyldig
 					}
-					nightUpdate = !nightUpdate; //Added a day to the other, they are now changing place
-				}
-				// nextTime er nå mellom start og stop, og hvilken som er minst er nå gitt ved "smallest"
-				
-				if (!nightUpdate){
-					// gyldig tid, vi er mellom start og stopp
 				}
 				else {
-					// ugyldig, og startTime er nå neste gyldige (siden den kommer etter stop)
-					nextTime.set(startTime.toMillis(false));
+					while (startTime.before(nextTime) && stopTime.before(nextTime)){ // loope til nextTime er mellom grensene
+						if (!nightUpdate){
+							// start -> stop -> next, sett start en dag frem
+							startTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+						}
+						else { // stop -> start -> next, set stop en dag frem
+							stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+						}
+						nightUpdate = !nightUpdate; //Added a day to the other, they are now changing place
+					}
+					// nextTime er nå mellom start og stop, og hvilken som er minst er nå gitt ved "smallest"
+					
+					if (!nightUpdate){
+						// start -> next -> stop, next er i gyldig intervall
+					}
+					else {
+						// stop -> next -> start, next er utenfor gyldig intervall, sett next til start
+						nextTime.set(startTime.toMillis(false));
+					}
 				}
 				nextUpdate = nextTime.toMillis(false);
 			
