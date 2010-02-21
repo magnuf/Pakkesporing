@@ -10,6 +10,6 @@
     <string name="updatePref">updatePref</string>
     <string name="autostartPref">autostartPref</string>
     <string name="nightmodePref">nightmodePref</string>
-    <string name="updateintervalDayPref">updateintervalDayPref</string>
-    <string name="updateintervalNightPref">updateintervalNightPref</string>
+    <string name="updateStart">updateStart</string>
+    <string name="updateStop">updateStop</string>
 </resources>

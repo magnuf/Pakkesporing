@@ -115,26 +115,27 @@ public class TrackingUtils {
 			if(prefs.getBoolean("nightmodePref", true)){
 				Time nextTime = new Time();
 				Date now = new Date();
-				Time dayTime = new Time();
-				Time nightTime = new Time();
+				Time startTime = new Time();
+				Time stopTime = new Time();
 				
-				Date dayDate; 
-				Date nightDate;
+				Date startDate; 
+				Date stopDate;
 				try {
-					dayDate = tidsFormat.parse(prefs.getString("updateintervalDayPref", "08:00"));
-					nightDate = tidsFormat.parse(prefs.getString("updateintervalNightPref", "22:00"));
+					startDate = tidsFormat.parse(prefs.getString("updateStart", "08:00"));
+					stopDate = tidsFormat.parse(prefs.getString("updateStop", "22:00"));
 				} catch (ParseException e) {
 					throw new RuntimeException("Feil ved parsing av dato-preferanse");
 				}
-				nightTime.set(0, nightDate.getMinutes(), nightDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
-				dayTime.set(0, dayDate.getMinutes(), dayDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
-				if ( nightDate.before(dayDate)) {
-					nightTime.set(nightTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+				stopTime.set(0, stopDate.getMinutes(), stopDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
+				startTime.set(0, startDate.getMinutes(), startDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
+
+				if ( stopDate.before(startDate)) {
+					stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
 				}
 				
 				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
-				if(nextTime.after(nightTime) && nextTime.before(dayTime)){
-					nextTime.set(dayTime.toMillis(false));
+				if(nextTime.after(stopTime) && nextTime.before(startTime)){
+					nextTime.set(startTime.toMillis(false));
 				}
 				nextUpdate = nextTime.toMillis(false);
 			}else{

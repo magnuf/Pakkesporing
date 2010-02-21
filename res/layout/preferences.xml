@@ -39,13 +39,13 @@
 	pt:defaultTime="08:00"
   	android:dependency="@string/nightmodePref"
   	android:summary="Når den skal starte å se etter oppdateringer"
-  	android:key="@string/updateintervalDayPref"
+  	android:key="@string/updateStart"
   />
   <com.krashk.pakketracker.TimePickerPreference
   	android:title="Stopp"
 	pt:defaultTime="22:00"
   	android:dependency="@string/nightmodePref"
   	android:summary="Når den skal slutte å se etter oppdateringer"
-  	android:key="@string/updateintervalNightPref"
+  	android:key="@string/updateStop"
   />
 </PreferenceScreen>
