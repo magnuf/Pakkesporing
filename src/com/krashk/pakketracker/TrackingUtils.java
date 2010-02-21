@@ -128,14 +128,33 @@ public class TrackingUtils {
 				}
 				stopTime.set(0, stopDate.getMinutes(), stopDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
 				startTime.set(0, startDate.getMinutes(), startDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
-
-				if ( stopDate.before(startDate)) {
-					stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
-				}
-				
 				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
-				if(nextTime.after(stopTime) && nextTime.before(startTime)){
-					nextTime.set(startTime.toMillis(false));
+				
+				// alle tider er nå innenfor samme døgn
+				if (nextTime.before(stopTime)){
+					if (nextTime.before(startTime)){
+						// nextTime er før gyldig intervall, setter til start
+						nextTime.set(startTime.toMillis(false));
+					}
+					else {
+						// bruk satt nextTime
+					}
+				}
+				else {
+					// etter stopTime - er det i morgen?
+					startTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+					stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+					if (nextTime.before(startTime)){
+						// mellom stop og start - setter til starttid i morgen
+						nextTime.set(startTime.toMillis(false));
+					}
+					else if (nextTime.before(stopTime)) {
+						// gyldig, bruker satt
+					}
+					else {
+						// burde vel strengt talt ikke komme hit. men men
+						nextTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+					}
 				}
 				nextUpdate = nextTime.toMillis(false);
 			}else{
