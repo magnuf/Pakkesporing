@@ -128,8 +128,8 @@ public class TrackingUtils {
 				}
 				nightTime.set(0, nightDate.getMinutes(), nightDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
 				dayTime.set(0, dayDate.getMinutes(), dayDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
-				if ( nightDate.after(dayDate)) {
-					dayTime.set(dayTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
+				if ( nightDate.before(dayDate)) {
+					nightTime.set(nightTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
 				}
 				
 				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
