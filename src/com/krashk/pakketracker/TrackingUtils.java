@@ -26,6 +26,7 @@ public class TrackingUtils {
 
 
 	private static SimpleDateFormat tidsFormat = new SimpleDateFormat("HH:mm");
+	private static final boolean START_FIRST = false;
 	
 	public static String updateStatus(String packageNumber, String oldStatus) throws ClientProtocolException, IOException {	
 		HttpClient client = new DefaultHttpClient();
@@ -130,31 +131,24 @@ public class TrackingUtils {
 				startTime.set(0, startDate.getMinutes(), startDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
 				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
 				
-				// alle tider er nå innenfor samme døgn
-				if (nextTime.before(stopTime)){
-					if (nextTime.before(startTime)){
-						// nextTime er før gyldig intervall, setter til start
-						nextTime.set(startTime.toMillis(false));
+				boolean smallest = stopTime.before(startTime);
+				while (startTime.before(nextTime) && stopTime.before(nextTime)){ // loope til nextTime er mellom grensene
+					if (smallest == START_FIRST){
+						startTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
 					}
-					else {
-						// bruk satt nextTime
+					else { // STOP er før i tid
+						stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
 					}
+					smallest = !smallest;
+				}
+				// nextTime er nå mellom start og stop, og hvilken som er minst er nå gitt ved "smallest"
+				
+				if (smallest == START_FIRST){
+					// gyldig tid, vi er mellom start og stopp
 				}
 				else {
-					// etter stopTime - er det i morgen?
-					startTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
-					stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
-					if (nextTime.before(startTime)){
-						// mellom stop og start - setter til starttid i morgen
-						nextTime.set(startTime.toMillis(false));
-					}
-					else if (nextTime.before(stopTime)) {
-						// gyldig, bruker satt
-					}
-					else {
-						// burde vel strengt talt ikke komme hit. men men
-						nextTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
-					}
+					// ugyldig, og startTime er nå neste gyldige (siden den kommer etter stop)
+					nextTime.set(startTime.toMillis(false));
 				}
 				nextUpdate = nextTime.toMillis(false);
 			}else{
