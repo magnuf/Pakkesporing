@@ -127,23 +127,25 @@ public class TrackingUtils {
 				} catch (ParseException e) {
 					throw new RuntimeException("Feil ved parsing av dato-preferanse");
 				}
-				stopTime.set(0, stopDate.getMinutes(), stopDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
 				startTime.set(0, startDate.getMinutes(), startDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
+				stopTime.set(0, stopDate.getMinutes(), stopDate.getHours(), now.getDate(), now.getMonth(), now.getYear());
 				nextTime.set(System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS);
+				// stop- og startTime er nå innenfor samme døgn
 				
-				boolean smallest = stopTime.before(startTime);
+
+				boolean nightUpdate = stopTime.before(startTime);
 				while (startTime.before(nextTime) && stopTime.before(nextTime)){ // loope til nextTime er mellom grensene
-					if (smallest == START_FIRST){
+					if (!nightUpdate){
 						startTime.set(startTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
 					}
 					else { // STOP er før i tid
 						stopTime.set(stopTime.toMillis(false) + DateUtils.DAY_IN_MILLIS);
 					}
-					smallest = !smallest;
+					nightUpdate = !nightUpdate; //Added a day to the other, they are now changing place
 				}
 				// nextTime er nå mellom start og stop, og hvilken som er minst er nå gitt ved "smallest"
 				
-				if (smallest == START_FIRST){
+				if (!nightUpdate){
 					// gyldig tid, vi er mellom start og stopp
 				}
 				else {
@@ -151,6 +153,7 @@ public class TrackingUtils {
 					nextTime.set(startTime.toMillis(false));
 				}
 				nextUpdate = nextTime.toMillis(false);
+			
 			}else{
 				nextUpdate = System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS;
 			}
