@@ -108,6 +108,11 @@ public class TrackingUtils {
     	packagesDbAdapter.close();
     	return hasChanged;
 	}
+	
+	public static int getNumPackages(PackagesDbAdapter packagesDbAdapter){
+		return packagesDbAdapter.getNumPackages();
+	}
+	
 	public static void updateTrackingService(Context context){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		int intervalValPref = Integer.parseInt(prefs.getString("intervalVal", "0"));

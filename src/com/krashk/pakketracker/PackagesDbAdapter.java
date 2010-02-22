@@ -118,6 +118,15 @@ public class PackagesDbAdapter {
 		return db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_NUMBER,
 				KEY_STATUS, KEY_CHANGED}, null, null, null, null, KEY_ID+ " ASC");
 	}
+	/**
+	 * Returns the number of packages in the db
+	 * 
+	 * @return Number of packages
+	 */
+	public int getNumPackages() {
+		return db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_NUMBER,
+				KEY_STATUS, KEY_CHANGED}, null, null, null, null, null).getCount();
+	}
 
 	/**
 	 * Return a Cursor positioned at the package that matches the given id
