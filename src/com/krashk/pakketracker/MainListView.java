@@ -42,6 +42,12 @@ public class MainListView extends ListActivity {
 		super.onCreate(savedInstanceState);
 		packageDbAdapter = new PackagesDbAdapter(this);
 		
+//		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+//		SharedPreferences.Editor editor = settings.edit();
+//		editor.putString("mordi", "Er mann");
+//		editor.commit();
+		
+		
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean update = prefs.getBoolean("updatePref", false);
