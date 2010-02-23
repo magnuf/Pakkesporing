@@ -26,7 +26,6 @@ public class TrackingUtils {
 
 
 	private static SimpleDateFormat tidsFormat = new SimpleDateFormat("HH:mm");
-	private static final boolean START_FIRST = false;
 	
 	public static String updateStatus(String packageNumber, String oldStatus) throws ClientProtocolException, IOException {	
 		HttpClient client = new DefaultHttpClient();

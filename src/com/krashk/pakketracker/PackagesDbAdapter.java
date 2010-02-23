@@ -30,7 +30,7 @@ public class PackagesDbAdapter {
 	private static final String DATABASE_TABLE = "packages";
 	private static final int DATABASE_VERSION = 2;
 
-	private final Context mCtx;
+	private final Context ctx;
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -59,7 +59,7 @@ public class PackagesDbAdapter {
 	 * @param ctx the Context within which to work
 	 */
 	public PackagesDbAdapter(Context ctx) {
-		this.mCtx = ctx;
+		this.ctx = ctx;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class PackagesDbAdapter {
 	 * @throws SQLException if the database could be neither opened or created
 	 */
 	public PackagesDbAdapter open() throws SQLException {
-		dbHelper = new DatabaseHelper(mCtx);
+		dbHelper = new DatabaseHelper(ctx);
 		db = dbHelper.getWritableDatabase();
 		return this;
 	}
