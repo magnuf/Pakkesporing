@@ -1,6 +1,9 @@
 package com.krashk.pakketracker;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -173,6 +176,26 @@ public class TrackingUtils {
 			}else{
 				nextUpdate = System.currentTimeMillis() + intervalValPref * DateUtils.MINUTE_IN_MILLIS;
 			}
+			
+			Date logdate = new Date(nextUpdate);
+			FileOutputStream fos = null;
+			try {
+				fos = context.openFileOutput("timelog.txt", Context.MODE_APPEND);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			OutputStreamWriter osw = new OutputStreamWriter(fos);
+			try {
+				osw.write(logdate.getHours() + ":" + logdate.getMinutes());
+				osw.flush();
+				osw.close();
+				fos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
 			AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 			Intent i = new Intent(context, TrackingService.class);
 			PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
